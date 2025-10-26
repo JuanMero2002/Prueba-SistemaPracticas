@@ -1,0 +1,198 @@
+{% extends 'inscripciones/base.html' %}
+
+{% block title %}Inicio - Sistema de Prácticas Pre Profesionales{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Encuentra tu Práctica Pre Profesional</h1>
+                <p class="lead mb-4">Conecta con las mejores empresas y desarrolla tus habilidades profesionales mientras estudias.</p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'lista_practicas' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-search"></i> Ver Prácticas
+                    </a>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'registro_estudiante' %}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-person-plus"></i> Registrarse
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-briefcase-fill" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Estadísticas -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-primary text-white">
+                    <div class="card-body">
+                        <i class="bi bi-briefcase display-4 mb-3"></i>
+                        <h3 class="card-title">{{ practicas_destacadas.count }}</h3>
+                        <p class="card-text">Prácticas Disponibles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-success text-white">
+                    <div class="card-body">
+                        <i class="bi bi-building display-4 mb-3"></i>
+                        <h3 class="card-title">{{ empresas_destacadas.count }}</h3>
+                        <p class="card-text">Empresas Participantes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-info text-white">
+                    <div class="card-body">
+                        <i class="bi bi-people display-4 mb-3"></i>
+                        <h3 class="card-title">500+</h3>
+                        <p class="card-text">Estudiantes Registrados</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-warning text-white">
+                    <div class="card-body">
+                        <i class="bi bi-check-circle display-4 mb-3"></i>
+                        <h3 class="card-title">95%</h3>
+                        <p class="card-text">Tasa de Éxito</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Prácticas Destacadas -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold">Prácticas Destacadas</h2>
+                <p class="lead text-muted">Descubre las mejores oportunidades de práctica profesional</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for practica in practicas_destacadas %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 card-hover shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title">{{ practica.titulo }}</h5>
+                                <span class="badge bg-primary">{{ practica.empresa.sector }}</span>
+                            </div>
+                            <p class="card-text text-muted">{{ practica.descripcion|truncatewords:20 }}</p>
+                            <div class="row text-center mb-3">
+                                <div class="col-4">
+                                    <small class="text-muted">Duración</small>
+                                    <div class="fw-bold">{{ practica.duracion_semanas }} semanas</div>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted">Horas/Semana</small>
+                                    <div class="fw-bold">{{ practica.horas_semana }}h</div>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted">Cupos</small>
+                                    <div class="fw-bold">{{ practica.cupos_disponibles }}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="bi bi-building"></i> {{ practica.empresa.nombre }}
+                                </small>
+                                <a href="{% url 'detalle_practica' practica.pk %}" class="btn btn-outline-primary btn-sm">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No hay prácticas disponibles en este momento.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'lista_practicas' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-list"></i> Ver Todas las Prácticas
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Empresas Destacadas -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold">Empresas Participantes</h2>
+                <p class="lead text-muted">Conoce las empresas que ofrecen oportunidades de práctica</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for empresa in empresas_destacadas %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100 card-hover shadow-sm">
+                        <div class="card-body text-center">
+                            {% if empresa.logo %}
+                                <img src="{{ empresa.logo.url }}" alt="{{ empresa.nombre }}" class="img-fluid mb-3" style="max-height: 80px;">
+                            {% else %}
+                                <i class="bi bi-building display-4 text-muted mb-3"></i>
+                            {% endif %}
+                            <h6 class="card-title">{{ empresa.nombre }}</h6>
+                            <p class="card-text text-muted small">{{ empresa.sector }}</p>
+                            <a href="{% url 'detalle_empresa' empresa.pk %}" class="btn btn-outline-primary btn-sm">
+                                Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No hay empresas registradas en este momento.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'lista_empresas' %}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-building"></i> Ver Todas las Empresas
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">¿Listo para comenzar tu práctica?</h2>
+        <p class="lead mb-4">Regístrate ahora y encuentra la oportunidad perfecta para desarrollar tus habilidades profesionales.</p>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'registro_estudiante' %}" class="btn btn-light btn-lg">
+                <i class="bi bi-person-plus"></i> Registrarse Ahora
+            </a>
+        {% else %}
+            <a href="{% url 'lista_practicas' %}" class="btn btn-light btn-lg">
+                <i class="bi bi-search"></i> Buscar Prácticas
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
