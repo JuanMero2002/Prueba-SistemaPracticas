@@ -6,10 +6,12 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils import timezone
 from django.http import JsonResponse
-from .models import Practica, Inscripcion, Estudiante, Empresa, Carrera, DocumentoInscripcion
+from .models import Practica, Inscripcion, Estudiante, Empresa, Carrera, DocumentoInscripcion, Facultad, PracticaInterna, InscripcionInterna
 from .forms import (
     EstudianteRegistrationForm, EstudianteUpdateForm, EmpresaForm, 
-    PracticaForm, InscripcionForm, DocumentoInscripcionForm, BusquedaPracticasForm
+    PracticaForm, InscripcionForm, DocumentoInscripcionForm, BusquedaPracticasForm,
+    EmpresaRegistrationForm, FacultadRegistrationForm, PracticaInternaForm, 
+    InscripcionInternaForm, BusquedaPracticasInternasForm
 )
 
 
@@ -193,6 +195,42 @@ def registro_estudiante(request):
         'form': form,
     }
     return render(request, 'inscripciones/registro_estudiante.html', context)
+
+
+def registro_empresa(request):
+    """Registro de nuevas empresas"""
+    if request.method == 'POST':
+        form = EmpresaRegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Empresa registrada exitosamente. Bienvenido al sistema.')
+            return redirect('home')
+    else:
+        form = EmpresaRegistrationForm()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'inscripciones/registro_empresa.html', context)
+
+
+def registro_facultad(request):
+    """Registro de nuevas facultades"""
+    if request.method == 'POST':
+        form = FacultadRegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Facultad registrada exitosamente. Bienvenido al sistema.')
+            return redirect('home')
+    else:
+        form = FacultadRegistrationForm()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'inscripciones/registro_facultad.html', context)
 
 
 @login_required

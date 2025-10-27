@@ -1,0 +1,168 @@
+{% extends 'inscripciones/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Registro de Facultad - Sistema de Prácticas{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card-uleam">
+                <div class="card-header-uleam text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-mortarboard-fill"></i> Registro de Facultad ULEAM
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted text-center mb-4">
+                        Completa el formulario para registrar tu facultad y comenzar a publicar prácticas pre profesionales internas.
+                    </p>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Información de la Facultad -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="title-uleam border-bottom pb-2">
+                                    <i class="bi bi-mortarboard-fill"></i> Información de la Facultad
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.nombre|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.codigo|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.decano|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.telefono|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                {{ form.direccion|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                {{ form.descripcion|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.logo|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <!-- Información del Contacto -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="subtitle-uleam border-bottom pb-2">
+                                    <i class="bi bi-person"></i> Información del Contacto
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.contacto_responsable|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <!-- Información de Acceso -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="title-uleam border-bottom pb-2">
+                                    <i class="bi bi-shield-lock"></i> Información de Acceso
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.username|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.password1|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.password2|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <!-- Términos y Condiciones -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terminos" required>
+                                    <label class="form-check-label" for="terminos">
+                                        Acepto los <a href="#" class="text-primary">términos y condiciones</a> del sistema y confirmo que la información proporcionada es verídica.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botones -->
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-uleam-primary btn-lg me-3">
+                                    <i class="bi bi-mortarboard-fill"></i> Registrar Facultad
+                                </button>
+                                <a href="{% url 'login' %}" class="btn btn-uleam-outline btn-lg">
+                                    <i class="bi bi-box-arrow-in-right"></i> Ya tengo cuenta
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        border-radius: 0.5rem;
+        border: 2px solid #E9ECEF;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: var(--uleam-red);
+        box-shadow: 0 0 0 0.2rem rgba(196, 30, 58, 0.25);
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--uleam-red);
+        border-color: var(--uleam-red);
+    }
+</style>
+{% endblock %}

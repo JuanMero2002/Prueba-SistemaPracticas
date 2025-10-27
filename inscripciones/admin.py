@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Carrera, Estudiante, Empresa, Practica, Inscripcion, DocumentoInscripcion
+from .models import Carrera, Estudiante, Empresa, Practica, Inscripcion, DocumentoInscripcion, Facultad, PracticaInterna, InscripcionInterna
 
 
 @admin.register(Carrera)
@@ -55,3 +55,32 @@ class DocumentoInscripcionAdmin(admin.ModelAdmin):
     search_fields = ['nombre', 'inscripcion__estudiante__user__first_name']
     ordering = ['-fecha_subida']
     readonly_fields = ['fecha_subida']
+
+
+@admin.register(Facultad)
+class FacultadAdmin(admin.ModelAdmin):
+    list_display = ['nombre', 'codigo', 'decano', 'activa']
+    list_filter = ['activa']
+    search_fields = ['nombre', 'codigo', 'decano', 'contacto_responsable']
+    ordering = ['nombre']
+    readonly_fields = ['fecha_registro']
+
+
+@admin.register(PracticaInterna)
+class PracticaInternaAdmin(admin.ModelAdmin):
+    list_display = ['titulo', 'facultad', 'tipo_servicio', 'estado', 'cupos_disponibles', 'fecha_inicio', 'fecha_limite_inscripcion']
+    list_filter = ['estado', 'facultad', 'tipo_servicio', 'fecha_inicio', 'activa']
+    search_fields = ['titulo', 'facultad__nombre', 'descripcion']
+    ordering = ['-fecha_publicacion']
+    readonly_fields = ['fecha_publicacion']
+    date_hierarchy = 'fecha_inicio'
+
+
+@admin.register(InscripcionInterna)
+class InscripcionInternaAdmin(admin.ModelAdmin):
+    list_display = ['estudiante', 'practica_interna', 'estado', 'fecha_inscripcion', 'fecha_evaluacion']
+    list_filter = ['estado', 'fecha_inscripcion', 'practica_interna__facultad']
+    search_fields = ['estudiante__user__first_name', 'estudiante__user__last_name', 'practica_interna__titulo']
+    ordering = ['-fecha_inscripcion']
+    readonly_fields = ['fecha_inscripcion']
+    date_hierarchy = 'fecha_inscripcion'

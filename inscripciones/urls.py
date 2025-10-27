@@ -12,6 +12,8 @@ urlpatterns = [
     
     # Autenticación
     path('registro/', views.registro_estudiante, name='registro_estudiante'),
+    path('registro-empresa/', views.registro_empresa, name='registro_empresa'),
+    path('registro-facultad/', views.registro_facultad, name='registro_facultad'),
     path('login/', auth_views.LoginView.as_view(template_name='inscripciones/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     
