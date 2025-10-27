@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'inscripciones',
     'crispy_forms',
     'crispy_bootstrap5',
+    'chatbot',
 ]
 
 MIDDLEWARE = [

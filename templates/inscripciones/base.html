@@ -560,6 +560,95 @@
     </style>
     
     {% block extra_css %}{% endblock %}
+    <style>
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            max-width: 90%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+        }
+        #chatbot-header {
+            background: var(--uleam-gradient);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #chatbot-body {
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-message {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+        .user-message {
+            background-color: #f1f1f1;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: var(--uleam-red);
+            color: white;
+            align-self: flex-start;
+        }
+        #chatbot-footer {
+            padding: 15px;
+            border-top: 1px solid #f1f1f1;
+            display: flex;
+        }
+        #chatbot-input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            margin-right: 10px;
+        }
+        #chatbot-send {
+            background: var(--uleam-gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--uleam-gradient);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -606,7 +695,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                        <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit(); return false;">
                             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                         </a>
                     </li>
@@ -722,9 +814,85 @@
         </div>
     </footer>
 
+    <!-- Chatbot HTML -->
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <span>Asistente Virtual</span>
+            <button id="close-chatbot" style="background:none; border:none; color:white; font-size: 20px;">&times;</button>
+        </div>
+        <div id="chatbot-body">
+            <div class="chat-message bot-message">¡Hola! ¿Cómo puedo ayudarte hoy?</div>
+        </div>
+        <div id="chatbot-footer">
+            <input type="text" id="chatbot-input" placeholder="Escribe un mensaje...">
+            <button id="chatbot-send"><i class="bi bi-send"></i></button>
+        </div>
+    </div>
+    <button id="chatbot-toggle"><i class="bi bi-chat-dots"></i></button>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     {% block extra_js %}{% endblock %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatbotContainer = document.getElementById('chatbot-container');
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const closeChatbot = document.getElementById('close-chatbot');
+            const chatbotBody = document.getElementById('chatbot-body');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const chatbotSend = document.getElementById('chatbot-send');
+
+            chatbotToggle.addEventListener('click', () => {
+                chatbotContainer.style.display = 'flex';
+                chatbotToggle.style.display = 'none';
+            });
+
+            closeChatbot.addEventListener('click', () => {
+                chatbotContainer.style.display = 'none';
+                chatbotToggle.style.display = 'flex';
+            });
+
+            function addMessage(message, sender) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat-message', sender + '-message');
+                messageElement.textContent = message;
+                chatbotBody.appendChild(messageElement);
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            }
+
+            async function sendMessage() {
+                const message = chatbotInput.value.trim();
+                if (message === '') return;
+
+                addMessage(message, 'user');
+                chatbotInput.value = '';
+
+                try {
+                    const response = await fetch("{% url 'chatbot' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+                    const data = await response.json();
+                    addMessage(data.response, 'bot');
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage('Lo siento, ha ocurrido un error.', 'bot');
+                }
+            }
+
+            chatbotSend.addEventListener('click', sendMessage);
+            chatbotInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

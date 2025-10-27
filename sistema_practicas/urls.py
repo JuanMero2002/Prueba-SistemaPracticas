@@ -38,6 +38,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inscripciones.urls')),
+    path('chatbot/', include('chatbot.urls')),
 ]
 
 # Servir archivos media y estáticos en desarrollo
