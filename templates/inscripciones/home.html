@@ -1,0 +1,418 @@
+{% extends 'inscripciones/base.html' %}
+
+{% block title %}Inicio - Sistema de Prácticas Pre Profesionales ULEAM{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="hero-divider mx-auto"></div>
+                <h1 class="fade-in-up">Prácticas Pre Profesionales y Profesionales</h1>
+                <p class="subtitle fade-in-up">¡Aportamos soluciones que trascienden!</p>
+                <p class="lead fade-in-up">Conecta con las mejores empresas y facultades para desarrollar tus habilidades profesionales. Participa en proyectos de vinculación con enfoque de innovación social que aportan soluciones a problemas y necesidades de la sociedad.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap fade-in-up mt-4">
+                    <a href="{% url 'lista_practicas' %}" class="btn btn-light btn-lg px-4">
+                        <i class="bi bi-search"></i> Explorar Prácticas
+                    </a>
+                    {% if not user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-lg px-4 dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-plus"></i> Registrarse
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'registro_estudiante' %}">
+                                    <i class="bi bi-mortarboard"></i> Como Estudiante
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'registro_empresa' %}">
+                                    <i class="bi bi-building"></i> Como Empresa
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'registro_facultad' %}">
+                                    <i class="bi bi-mortarboard-fill"></i> Como Facultad
+                                </a></li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Componentes de Prácticas -->
+<section class="py-5 section-uleam-white">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="section-title">Componentes</h2>
+                <p class="section-subtitle">Dos modalidades de prácticas para tu desarrollo profesional</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card-gradient-border h-100">
+                    <div class="card-inner">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-briefcase-fill text-danger" style="font-size: 4rem;"></i>
+                        </div>
+                        <h4 class="text-center mb-3" style="color: var(--uleam-red);">Prácticas Pre-Profesionales</h4>
+                        <p class="text-center text-muted">
+                            Experiencias en contextos relacionados al perfil del estudiante para desarrollar competencias laborales en empresas del sector público y privado.
+                        </p>
+                        <ul class="list-uleam mt-4">
+                            <li>Desarrollo de competencias laborales</li>
+                            <li>Experiencia en entornos reales</li>
+                            <li>Networking profesional</li>
+                            <li>Certificación de horas prácticas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card-gradient-border h-100">
+                    <div class="card-inner">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-heart-fill text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h4 class="text-center mb-3" style="color: var(--uleam-green);">Servicio Comunitario</h4>
+                        <p class="text-center text-muted">
+                            Aporte de soluciones innovadoras a problemas de personas, grupos o contextos de vulnerabilidad mediante proyectos de vinculación.
+                        </p>
+                        <ul class="list-uleam mt-4">
+                            <li>Innovación social aplicada</li>
+                            <li>Impacto en comunidades</li>
+                            <li>Desarrollo de valores sociales</li>
+                            <li>Trabajo interdisciplinario</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Estadísticas -->
+<section class="py-5 section-uleam-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="section-title">Nuestros Números</h2>
+                <p class="section-subtitle">El impacto de nuestro sistema en la comunidad universitaria</p>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="card-uleam stats-card-red">
+                    <div class="card-body">
+                        <i class="bi bi-briefcase display-4 mb-3"></i>
+                        <h3 class="card-title">{{ practicas_destacadas.count }}</h3>
+                        <p class="card-text">Prácticas Disponibles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card-uleam stats-card-green">
+                    <div class="card-body">
+                        <i class="bi bi-building display-4 mb-3"></i>
+                        <h3 class="card-title">{{ empresas_destacadas.count }}</h3>
+                        <p class="card-text">Empresas Aliadas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card-uleam stats-card-white">
+                    <div class="card-body">
+                        <i class="bi bi-people display-4 mb-3"></i>
+                        <h3 class="card-title">500+</h3>
+                        <p class="card-text">Estudiantes Participantes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card-uleam stats-card-green">
+                    <div class="card-body">
+                        <i class="bi bi-check-circle display-4 mb-3"></i>
+                        <h3 class="card-title">95%</h3>
+                        <p class="card-text">Tasa de Satisfacción</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Proyectos de Vinculación -->
+<section class="py-5 section-uleam-white">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="section-title">Proyectos de Prácticas</h2>
+                <p class="section-subtitle">Nuestros proyectos basan su desarrollo en las capacidades de investigación, innovación y emprendimiento</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="numbered-item">
+                    <div class="number">1</div>
+                    <div>
+                        <h5 class="mb-2">Recabar datos</h5>
+                        <p class="text-muted">A través del uso intensivo de las tecnologías de la información y comunicación para obtener información relevante.</p>
+                    </div>
+                </div>
+                <div class="numbered-item">
+                    <div class="number">2</div>
+                    <div>
+                        <h5 class="mb-2">Transformar información</h5>
+                        <p class="text-muted">Convertir los datos en información válida para la toma de decisiones de la comunidad universitaria y sociedad.</p>
+                    </div>
+                </div>
+                <div class="numbered-item">
+                    <div class="number">3</div>
+                    <div>
+                        <h5 class="mb-2">Generar proyectos</h5>
+                        <p class="text-muted">Crear proyectos de vinculación que aporten soluciones innovadoras a problemas reales de la sociedad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Prácticas Destacadas -->
+<section class="py-5 section-uleam-white">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="title-uleam mb-3">Prácticas Destacadas</h2>
+                <p class="lead text-muted">Descubre las mejores oportunidades de práctica profesional</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for practica in practicas_destacadas %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card-uleam h-100">
+                        <div class="card-header-uleam">
+                            <h5 class="card-title mb-0">{{ practica.titulo }}</h5>
+                            <small class="opacity-75">{{ practica.empresa.nombre }}</small>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text flex-grow-1">{{ practica.descripcion|truncatewords:20 }}</p>
+                            <div class="mt-auto">
+                                <div class="row text-center mb-3">
+                                    <div class="col-4">
+                                        <small class="text-muted">Duración</small>
+                                        <div class="fw-bold">{{ practica.duracion_semanas }} sem</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted">Horas/Sem</small>
+                                        <div class="fw-bold">{{ practica.horas_semana }}h</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted">Cupos</small>
+                                        <div class="fw-bold">{{ practica.cupos_disponibles }}</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'detalle_practica' practica.pk %}" class="btn btn-uleam-primary btn-sm flex-grow-1">
+                                        <i class="bi bi-eye"></i> Ver Detalles
+                                    </a>
+                                    {% if user.is_authenticated %}
+                                        <a href="{% url 'inscribirse_practica' practica.pk %}" class="btn btn-uleam-outline btn-sm">
+                                            <i class="bi bi-plus-circle"></i> Inscribirse
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No hay prácticas disponibles en este momento.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'lista_practicas' %}" class="btn btn-uleam-primary btn-lg">
+                <i class="bi bi-list"></i> Ver Todas las Prácticas
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Empresas Destacadas -->
+<section class="py-5 section-uleam-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="title-uleam mb-3">Empresas Participantes</h2>
+                <p class="lead text-muted">Conoce las empresas que ofrecen oportunidades de práctica</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for empresa in empresas_destacadas %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card-uleam h-100">
+                        <div class="card-body text-center d-flex flex-column">
+                            {% if empresa.logo %}
+                                <img src="{{ empresa.logo.url }}" alt="{{ empresa.nombre }}" class="img-fluid mb-3 mx-auto" style="max-height: 80px;">
+                            {% else %}
+                                <i class="bi bi-building display-4 text-muted mb-3"></i>
+                            {% endif %}
+                            <h6 class="card-title">{{ empresa.nombre }}</h6>
+                            <p class="card-text text-muted small flex-grow-1">{{ empresa.sector }}</p>
+                            <div class="mt-auto">
+                                <a href="{% url 'detalle_empresa' empresa.pk %}" class="btn btn-uleam-outline btn-sm">
+                                    <i class="bi bi-eye"></i> Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No hay empresas registradas en este momento.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'lista_empresas' %}" class="btn btn-uleam-outline btn-lg">
+                <i class="bi bi-building"></i> Ver Todas las Empresas
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonios -->
+<section class="py-5 section-uleam-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="section-title">Experiencias de Éxito</h2>
+                <p class="section-subtitle">Lo que dicen nuestros estudiantes y docentes sobre el programa de prácticas</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="testimonial-card h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="testimonial-avatar me-3">
+                            <i class="bi bi-person-circle" style="font-size: 80px; color: var(--uleam-red);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">María González</h6>
+                            <small class="text-muted">Estudiante de Administración</small>
+                        </div>
+                    </div>
+                    <p class="text-muted fst-italic">"La ULEAM me dio la oportunidad de realizar prácticas en una empresa líder del sector. Esta experiencia fue fundamental para mi desarrollo profesional y me ayudó a conseguir empleo antes de graduarme."</p>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="testimonial-card h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="testimonial-avatar me-3">
+                            <i class="bi bi-person-circle" style="font-size: 80px; color: var(--uleam-green);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Carlos Mendoza</h6>
+                            <small class="text-muted">Estudiante de Ingeniería</small>
+                        </div>
+                    </div>
+                    <p class="text-muted fst-italic">"El programa de vinculación me permitió trabajar en proyectos reales que benefician a la comunidad. Aprendí a aplicar mis conocimientos técnicos para resolver problemas sociales."</p>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="testimonial-card h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="testimonial-avatar me-3">
+                            <i class="bi bi-person-circle" style="font-size: 80px; color: var(--uleam-red);"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Dra. Ana Rojas</h6>
+                            <small class="text-muted">Docente Coordinadora</small>
+                        </div>
+                    </div>
+                    <p class="text-muted fst-italic">"La vinculación con la sociedad es fundamental para la formación integral de nuestros estudiantes. Les permite enfrentar desafíos reales y desarrollar competencias que serán clave en su vida profesional."</p>
+                    <div class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section-gradient">
+    <div class="container text-center position-relative" style="z-index: 2;">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold mb-4">¿Aún no has decidido tu futuro?</h2>
+                <p class="lead mb-4">Hoy, decide ser más. Únete a nuestra comunidad de estudiantes y profesionales comprometidos con el desarrollo de la sociedad.</p>
+                {% if not user.is_authenticated %}
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-lg px-4 dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-plus"></i> Inscríbete Ahora
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'registro_estudiante' %}">
+                                    <i class="bi bi-mortarboard"></i> Como Estudiante
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'registro_empresa' %}">
+                                    <i class="bi bi-building"></i> Como Empresa
+                                </a></li>
+                                <li><a class="dropdown-item" href="{% url 'registro_facultad' %}">
+                                    <i class="bi bi-mortarboard-fill"></i> Como Facultad
+                                </a></li>
+                            </ul>
+                        </div>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'lista_practicas' %}" class="btn btn-light btn-lg px-4">
+                            <i class="bi bi-search"></i> Buscar Prácticas
+                        </a>
+                        <a href="{% url 'mis_inscripciones' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-list-check"></i> Mis Inscripciones
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
